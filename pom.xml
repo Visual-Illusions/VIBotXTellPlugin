@@ -81,7 +81,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${project.name}-${project.version}${build.number}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -163,6 +162,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.name}-${project.version}${build.number}</finalName>
                             <artifactSet>
                                 <includes>
                                     <include>org.jdom:jdom2</include>
