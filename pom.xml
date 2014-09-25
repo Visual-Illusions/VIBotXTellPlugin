@@ -3,43 +3,46 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>VIBotXTellPlugin</name>
+    <name>TellPlugin</name>
     <groupId>net.visualillusionsent</groupId>
-    <artifactId>VIBotXTellPlugin</artifactId>
+    <artifactId>tellplugin</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jnks.build>0</jnks.build>
-        <viutils.version>1.3.0</viutils.version>
-        <pircbotx.version>2.0.1</pircbotx.version>
         <current.year>2014</current.year>
-        <devs>somners</devs>
+        <devs>somners,darkdiplomat</devs>
+        <build.number/>
+        <!-- Jar Signing -->
+        <keystore.path/>
+        <keystore.pass/>
+        <keystore.alias/>
+        <keystore.key.pass/>
     </properties>
     <description>Visual Illusions IRC Bot Tell Plugin</description>
     <licenses>
         <license>
-            <name>GNU Lesser General Public License v3</name>
-            <url>http://www.gnu.org/licenses/lgpl.html</url>
+            <name>GNU General Public License v3</name>
+            <url>http://www.gnu.org/licenses/gpl.html</url>
             <comments>
-                VIBotX is free software: you can redistribute it and/or modify
-                it under the terms of the GNU Lesser General Public License as published by
+                SlapEm is free software: you can redistribute it and/or modify
+                it under the terms of the GNU General Public License as published by
                 the Free Software Foundation, either version 3 of the License, or
                 (at your option) any later version.
 
                 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
                 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-                See the GNU Lesser General Public License for more details.
+                See the GNU General Public License for more details.
             </comments>
         </license>
     </licenses>
-    <url>http://wiki.visualillusionsent.net/</url>  <!-- TODO -->
+    <url>http://wiki.visualillusionsent.net/view/VIBotXTellPlugin</url>
     <inceptionYear>2014</inceptionYear>
     <organization>
         <name>Visual Illusions Entertainment</name>
         <url>http://visualillusionsent.net</url>
     </organization>
     <scm>
-        <url>https://github.com/Visual-Illusions/VIBotXTellPlugin</url>  <!-- TODO -->
+        <url>https://github.com/Visual-Illusions/VIBotXTellPlugin</url>
         <connection>GitHub</connection>
         <developerConnection>scm:git:git@github.com:Visual-Illusions/VIBotXTellPlugin.git</developerConnection>
     </scm>
@@ -48,21 +51,21 @@
         <system>GitHub Issues Tracker</system>
     </issueManagement>
     <ciManagement>
-        <url>http://ci.visualillusionsent.net/job/VIBotXTellPlugin</url> <!-- TODO -->
+        <url>http://ci.visualillusionsent.net/job/TellPlugin</url>
         <system>Jenkins</system>
     </ciManagement>
     <distributionManagement>
         <repository>
             <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
-            <url>http://repo.visualillusionsent.net/repository/public/</url>  <!-- TODO -->
+            <url>http://repo.visualillusionsent.net/repository/public/</url>
         </repository>
     </distributionManagement>
     <repositories>
         <repository>
             <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
-            <url>http://repo.visualillusionsent.net/</url>
+            <url>http://repo.visualillusionsent.net/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -78,7 +81,18 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${project.name}-${project.version}</finalName>
+        <finalName>${project.name}-${project.version}${build.number}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.inf</include>
+                    <include>META-INF/**</include>
+                    <include>resources/**</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <!-- Timestamp for year -->
             <plugin>
@@ -124,7 +138,7 @@
                         <manifestEntries>
                             <Application-Name>${project.name}</Application-Name>
                             <Version>${project.version}</Version>
-                            <Jenkins-Build>${jnks.build}</Jenkins-Build>
+                            <Jenkins-Build>${build.number}</Jenkins-Build>
                             <Vendor>Visual Illusions Entertainment</Vendor>
                             <Built-By>${user.name}</Built-By>
                             <Build-Time>${maven.build.timestamp}</Build-Time>
@@ -132,7 +146,7 @@
                             <Website-URL>${project.url}</Website-URL>
                             <Issues-URL>${project.issueManagement.url}</Issues-URL>
                             <Plugin-Class>net.visualillusionsent.tellplugin.TellPlugin</Plugin-Class>
-                            <Plugin-Name>VIBot Tell Plugin</Plugin-Name>
+                            <Plugin-Name>VIBotX Tell Plugin</Plugin-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -168,7 +182,6 @@
                                 </filter>
                             </filters>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>jnks-${jnks.build}</shadedClassifierName>
                         </configuration>
                     </execution>
                 </executions>
@@ -199,93 +212,13 @@
                         <java>SLASHSTAR_STYLE</java>
                     </mapping>
                     <properties>
-                        <years>${project.inceptionYear}-${current.year}</years>
+                        <years>${project.inceptionYear}<!-- -${current.year} --></years>
                     </properties>
                     <includes>
                         <include>src/main/java/**</include>
                     </includes>
                 </configuration>
             </plugin>
-            <!-- Update Config/Readme Files -->
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <includes>
-                        <include>target/**/*.cfg</include>
-                        <include>target/**/*.txt</include>
-                        <include>target/**/*.lang</include>
-                        <include>target/**/*.readme</include>
-                    </includes>
-                    <replacements>
-                        <replace>
-                            <token>{copyright.years}</token>
-                            <value>${project.inceptionYear}-${current.year}</value>
-                        </replace>
-                    </replacements>
-                    <regex>false</regex>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>attach-sources-javadoc</id>
-            <build>
-                <plugins>
-                    <!-- Source plugin -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- JavaDoc -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
-                        <configuration>
-                            <linksource>true</linksource>
-                            <doctitle>${project.name} ${project.version}</doctitle>
-                            <header>Generated: ${maven.build.timestamp}</header>
-                            <footer>
-                                <![CDATA[Licensed under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public License v3</a>]]>
-                            </footer>
-                            <links>
-                                <link>http://docs.visualillusionsent.net/VIUtils/${viutils.version}/</link>
-                                <link>http://site.pircbotx.googlecode.com/hg-history/${pircbotx.version}/apidocs/</link>
-                            </links>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-
 </project>
