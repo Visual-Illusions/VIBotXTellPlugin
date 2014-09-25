@@ -9,6 +9,7 @@ import net.visualillusionsent.vibotx.api.command.BotCommand;
 import net.visualillusionsent.vibotx.api.command.CommandCreationException;
 import net.visualillusionsent.vibotx.api.command.CommandEvent;
 import net.visualillusionsent.vibotx.api.plugin.Plugin;
+import org.pircbotx.Colors;
 
 import java.util.List;
 
@@ -69,8 +70,17 @@ public final class ReadTellCommand extends BaseCommand {
         }
         /* select our tell, and relay it to the user */
         Tell tell = tells.get(index);
-        event.getUser().send().notice(
-                String.format("%s: %s sent on %s: %s", event.getUser().getNick(), tell.getSender(), tell.getDateString(), tell.getMessage()));
+        StringBuilder sb = new StringBuilder();
+        /* Append the tell number */
+        sb.append(Colors.DARK_GREEN).append("Tell #").append(String.valueOf(index + 1)).append(Colors.NORMAL).append(":");
+        /* Append the time since it was sent */
+        sb.append(Colors.BROWN).append("Sent ").append(tell.getTimeSince()).append(" Ago").append(Colors.NORMAL).append(":");
+        /* Append the sender */
+        sb.append(Colors.DARK_GREEN).append(tell.getSender()).append(Colors.NORMAL).append(": ");
+        /* Append the message */
+        sb.append(tell.getMessage());
+        /* Send the message */
+        event.getUser().send().notice(sb.toString());
         /* Remove the tell from the queue */
         TellManager.removeTells(tell);
         return true;

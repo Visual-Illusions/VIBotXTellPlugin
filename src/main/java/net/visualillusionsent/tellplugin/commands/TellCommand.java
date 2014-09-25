@@ -6,6 +6,7 @@ package net.visualillusionsent.tellplugin.commands;
 
 import net.visualillusionsent.tellplugin.Tell;
 import net.visualillusionsent.tellplugin.TellManager;
+import net.visualillusionsent.tellplugin.listeners.UserChatListener;
 import net.visualillusionsent.vibotx.api.command.BaseCommand;
 import net.visualillusionsent.vibotx.api.command.BotCommand;
 import net.visualillusionsent.vibotx.api.command.CommandCreationException;
@@ -50,7 +51,9 @@ public final class TellCommand extends BaseCommand {
         Date date = Calendar.getInstance().getTime();
         Tell tell = new Tell(username, event.getUser().getNick(), message, date);
         TellManager.addTell(tell);
-        event.getChannel().send().message(event.getUser(), "I will send, " + username + " that message.");
+        event.getChannel().send().message(event.getUser(), "I will send, " + username + ", that message.");
+        /* notify the user that they have tells next time the message */
+        UserChatListener.get().removeUser(username);
         return true;
     }
 }

@@ -7,6 +7,7 @@ import net.visualillusionsent.vibotx.api.command.BotCommand;
 import net.visualillusionsent.vibotx.api.command.CommandCreationException;
 import net.visualillusionsent.vibotx.api.command.CommandEvent;
 import net.visualillusionsent.vibotx.api.plugin.Plugin;
+import org.pircbotx.Colors;
 
 import java.util.List;
 
@@ -51,13 +52,20 @@ public final class ViewTellCommand extends BaseCommand {
             Tell t = tells.get(i);
             /* Get the Proper ending index, don't throw IOOBE's */
             int endIndex = t.getMessage().length() < 30 ? t.getMessage().length() : 30;
+            /* Build our String */
+            StringBuilder sb = new StringBuilder();
+            /* Append the tell number */
+            sb.append(Colors.DARK_GREEN).append("Tell #").append(String.valueOf(i + 1)).append(Colors.NORMAL).append(":");
+            /* Append the time since the tell was sent */
+            sb.append(Colors.BROWN).append("Sent ").append(t.getTimeSince()).append(" Ago").append(Colors.NORMAL).append(":");
+            /* Append the sender */
+            sb.append(Colors.DARK_GREEN).append(t.getSender()).append(Colors.NORMAL).append(": ");
+            /* Append the message */
+            sb.append(t.getMessage().substring(0, endIndex));
             /* If this message is getting trimmed, lets give an indicator */
-            String trail = "";
-            if (t.getMessage().length() > 30) trail = "...";
+            if (t.getMessage().length() > 30) sb.append("...");
             /* And finally, lets notify the player */
-            event.getUser().send().notice(
-                    String.format("%s: Tell #%s: %s: %s: %s%s", event.getUser().getNick(),
-                            String.valueOf(i + 1), t.getSender(), t.getDateString(), t.getMessage().substring(0, endIndex), trail));
+            event.getUser().send().notice(sb.toString());
         }
         return true;
     }
