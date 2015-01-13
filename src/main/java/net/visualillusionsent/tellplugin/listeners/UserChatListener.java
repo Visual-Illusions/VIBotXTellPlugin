@@ -42,7 +42,7 @@ public class UserChatListener implements EventListener {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Hey, ").append(Colors.DARK_GREEN).append(username).append(Colors.NORMAL);
                 sb.append(", you have ").append(Colors.DARK_GREEN).append(tells.size());
-                sb.append(Colors.NORMAL).append(" tells. Use '!help' to learn how to read view them.");
+                sb.append(Colors.NORMAL).append(" tells. Use '.help' to learn how to read view them.");
                 event.getUser().send().notice(sb.toString());
                 /* add them to the list of users we've notified */
                 addUser(username);
