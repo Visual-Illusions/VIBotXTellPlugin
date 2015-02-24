@@ -9,7 +9,6 @@
     <version>0.1.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <current.year>2014</current.year>
         <devs>somners,darkdiplomat</devs>
         <build.number/>
         <!-- Jar Signing -->
@@ -212,7 +211,7 @@
                         <java>SLASHSTAR_STYLE</java>
                     </mapping>
                     <properties>
-                        <years>${project.inceptionYear}<!-- -${current.year} --></years>
+                        <years>${project.inceptionYear}-${current.year}</years>
                     </properties>
                     <includes>
                         <include>src/main/java/**</include>
